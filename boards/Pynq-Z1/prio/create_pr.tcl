@@ -26,8 +26,7 @@ array set pd_array {
 array set rm_array {
   0 uart
   1 gpio
-  2 led_pattern_C
-  3 led_pattern_3
+  2 led_pattern
 }
 
 

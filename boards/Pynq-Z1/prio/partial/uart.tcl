@@ -190,32 +190,45 @@ proc create_root_design { parentCell } {
 
 
   # Create interface ports
+  set S_AXI [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 S_AXI ]
+  set_property -dict [ list \
+   CONFIG.ADDR_WIDTH {4} \
+   CONFIG.ARUSER_WIDTH {0} \
+   CONFIG.AWUSER_WIDTH {0} \
+   CONFIG.BUSER_WIDTH {0} \
+   CONFIG.DATA_WIDTH {32} \
+   CONFIG.HAS_BRESP {1} \
+   CONFIG.HAS_BURST {0} \
+   CONFIG.HAS_CACHE {0} \
+   CONFIG.HAS_LOCK {0} \
+   CONFIG.HAS_PROT {0} \
+   CONFIG.HAS_QOS {0} \
+   CONFIG.HAS_REGION {0} \
+   CONFIG.HAS_RRESP {1} \
+   CONFIG.HAS_WSTRB {1} \
+   CONFIG.ID_WIDTH {0} \
+   CONFIG.MAX_BURST_LENGTH {1} \
+   CONFIG.NUM_READ_OUTSTANDING {1} \
+   CONFIG.NUM_READ_THREADS {1} \
+   CONFIG.NUM_WRITE_OUTSTANDING {1} \
+   CONFIG.NUM_WRITE_THREADS {1} \
+   CONFIG.PROTOCOL {AXI4LITE} \
+   CONFIG.READ_WRITE_MODE {READ_WRITE} \
+   CONFIG.RUSER_BITS_PER_BYTE {0} \
+   CONFIG.RUSER_WIDTH {0} \
+   CONFIG.SUPPORTS_NARROW_BURST {0} \
+   CONFIG.WUSER_BITS_PER_BYTE {0} \
+   CONFIG.WUSER_WIDTH {0} \
+   ] $S_AXI
 
   # Create ports
-  set S_AXI_araddr [ create_bd_port -dir I -from 8 -to 0 S_AXI_araddr ]
-  set S_AXI_arready [ create_bd_port -dir O S_AXI_arready ]
-  set S_AXI_arvalid [ create_bd_port -dir I S_AXI_arvalid ]
-  set S_AXI_awaddr [ create_bd_port -dir I -from 8 -to 0 S_AXI_awaddr ]
-  set S_AXI_awready [ create_bd_port -dir O S_AXI_awready ]
-  set S_AXI_awvalid [ create_bd_port -dir I S_AXI_awvalid ]
-  set S_AXI_bready [ create_bd_port -dir I S_AXI_bready ]
-  set S_AXI_bresp [ create_bd_port -dir O -from 1 -to 0 S_AXI_bresp ]
-  set S_AXI_bvalid [ create_bd_port -dir O S_AXI_bvalid ]
-  set S_AXI_rdata [ create_bd_port -dir O -from 31 -to 0 S_AXI_rdata ]
-  set S_AXI_rready [ create_bd_port -dir I S_AXI_rready ]
-  set S_AXI_rresp [ create_bd_port -dir O -from 1 -to 0 S_AXI_rresp ]
-  set S_AXI_rvalid [ create_bd_port -dir O S_AXI_rvalid ]
-  set S_AXI_wdata [ create_bd_port -dir I -from 31 -to 0 S_AXI_wdata ]
-  set S_AXI_wready [ create_bd_port -dir O S_AXI_wready ]
-  set S_AXI_wstrb [ create_bd_port -dir I -from 3 -to 0 S_AXI_wstrb ]
-  set S_AXI_wvalid [ create_bd_port -dir I S_AXI_wvalid ]
   set ip2intc_irpt [ create_bd_port -dir O -type intr ip2intc_irpt ]
   set pr_tri_i [ create_bd_port -dir I -from 7 -to 0 pr_tri_i ]
   set pr_tri_o [ create_bd_port -dir O -from 7 -to 0 pr_tri_o ]
   set pr_tri_t [ create_bd_port -dir O -from 7 -to 0 pr_tri_t ]
   set s_axi_aclk [ create_bd_port -dir I -type clk s_axi_aclk ]
   set_property -dict [ list \
-   CONFIG.FREQ_HZ {99999001} \
+   CONFIG.FREQ_HZ {100000000} \
  ] $s_axi_aclk
   set s_axi_aresetn [ create_bd_port -dir I -type rst s_axi_aresetn ]
 
@@ -251,56 +264,23 @@ proc create_root_design { parentCell } {
    CONFIG.DIN_WIDTH {8} \
  ] $xlslice_0
 
-  # Create instance: xlslice_4, and set properties
-  set xlslice_4 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_4 ]
-  set_property -dict [ list \
-   CONFIG.DIN_FROM {3} \
-   CONFIG.DIN_TO {0} \
-   CONFIG.DIN_WIDTH {9} \
-   CONFIG.DOUT_WIDTH {4} \
- ] $xlslice_4
-
-  # Create instance: xlslice_5, and set properties
-  set xlslice_5 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_5 ]
-  set_property -dict [ list \
-   CONFIG.DIN_FROM {3} \
-   CONFIG.DIN_TO {0} \
-   CONFIG.DIN_WIDTH {9} \
-   CONFIG.DOUT_WIDTH {4} \
- ] $xlslice_5
+  # Create interface connections
+  connect_bd_intf_net -intf_net S_AXI_1 [get_bd_intf_ports S_AXI] [get_bd_intf_pins axi_uartlite_0/S_AXI]
 
   # Create port connections
-  connect_bd_net -net Net [get_bd_ports S_AXI_awaddr] [get_bd_pins xlslice_5/Din]
-  connect_bd_net -net S_AXI_arvalid_1 [get_bd_ports S_AXI_arvalid] [get_bd_pins axi_uartlite_0/s_axi_arvalid]
-  connect_bd_net -net S_AXI_awvalid_1 [get_bd_ports S_AXI_awvalid] [get_bd_pins axi_uartlite_0/s_axi_awvalid]
-  connect_bd_net -net S_AXI_bready_1 [get_bd_ports S_AXI_bready] [get_bd_pins axi_uartlite_0/s_axi_bready]
-  connect_bd_net -net S_AXI_rready_1 [get_bd_ports S_AXI_rready] [get_bd_pins axi_uartlite_0/s_axi_rready]
-  connect_bd_net -net S_AXI_wdata_1 [get_bd_ports S_AXI_wdata] [get_bd_pins axi_uartlite_0/s_axi_wdata]
-  connect_bd_net -net S_AXI_wstrb_1 [get_bd_ports S_AXI_wstrb] [get_bd_pins axi_uartlite_0/s_axi_wstrb]
-  connect_bd_net -net S_AXI_wvalid_1 [get_bd_ports S_AXI_wvalid] [get_bd_pins axi_uartlite_0/s_axi_wvalid]
   connect_bd_net -net axi_quad_spi_0_ip2intc_irpt [get_bd_ports ip2intc_irpt] [get_bd_pins axi_uartlite_0/interrupt]
-  connect_bd_net -net axi_quad_spi_0_s_axi_arready [get_bd_ports S_AXI_arready] [get_bd_pins axi_uartlite_0/s_axi_arready]
-  connect_bd_net -net axi_quad_spi_0_s_axi_awready [get_bd_ports S_AXI_awready] [get_bd_pins axi_uartlite_0/s_axi_awready]
-  connect_bd_net -net axi_quad_spi_0_s_axi_bresp [get_bd_ports S_AXI_bresp] [get_bd_pins axi_uartlite_0/s_axi_bresp]
-  connect_bd_net -net axi_quad_spi_0_s_axi_bvalid [get_bd_ports S_AXI_bvalid] [get_bd_pins axi_uartlite_0/s_axi_bvalid]
-  connect_bd_net -net axi_quad_spi_0_s_axi_rdata [get_bd_ports S_AXI_rdata] [get_bd_pins axi_uartlite_0/s_axi_rdata]
-  connect_bd_net -net axi_quad_spi_0_s_axi_rresp [get_bd_ports S_AXI_rresp] [get_bd_pins axi_uartlite_0/s_axi_rresp]
-  connect_bd_net -net axi_quad_spi_0_s_axi_rvalid [get_bd_ports S_AXI_rvalid] [get_bd_pins axi_uartlite_0/s_axi_rvalid]
-  connect_bd_net -net axi_quad_spi_0_s_axi_wready [get_bd_ports S_AXI_wready] [get_bd_pins axi_uartlite_0/s_axi_wready]
   connect_bd_net -net axi_uartlite_0_tx [get_bd_pins axi_uartlite_0/tx] [get_bd_pins xlconcat_0/In1]
   connect_bd_net -net pr_4bits_tri_i_1 [get_bd_ports pr_tri_i] [get_bd_pins xlslice_0/Din]
   connect_bd_net -net s_axi_aclk_1 [get_bd_ports s_axi_aclk] [get_bd_pins axi_uartlite_0/s_axi_aclk]
-  connect_bd_net -net s_axi_araddr_1 [get_bd_ports S_AXI_araddr] [get_bd_pins xlslice_4/Din]
   connect_bd_net -net s_axi_aresetn_1 [get_bd_ports s_axi_aresetn] [get_bd_pins axi_uartlite_0/s_axi_aresetn]
   connect_bd_net -net xlconcat_0_dout [get_bd_ports pr_tri_o] [get_bd_pins xlconcat_0/dout]
   connect_bd_net -net xlconcat_1_dout [get_bd_ports pr_tri_t] [get_bd_pins xlconcat_1/dout]
   connect_bd_net -net xlconstant_0_dout [get_bd_pins xlconcat_0/In0] [get_bd_pins xlconcat_0/In2] [get_bd_pins xlconcat_0/In3] [get_bd_pins xlconcat_0/In4] [get_bd_pins xlconcat_0/In5] [get_bd_pins xlconcat_0/In6] [get_bd_pins xlconcat_0/In7] [get_bd_pins xlconcat_1/In1] [get_bd_pins xlconstant_0/dout]
   connect_bd_net -net xlconstant_1_dout [get_bd_pins xlconcat_1/In0] [get_bd_pins xlconcat_1/In2] [get_bd_pins xlconcat_1/In3] [get_bd_pins xlconcat_1/In4] [get_bd_pins xlconcat_1/In5] [get_bd_pins xlconcat_1/In6] [get_bd_pins xlconcat_1/In7] [get_bd_pins xlconstant_1/dout]
   connect_bd_net -net xlslice_0_Dout [get_bd_pins axi_uartlite_0/rx] [get_bd_pins xlslice_0/Dout]
-  connect_bd_net -net xlslice_4_Dout [get_bd_pins axi_uartlite_0/s_axi_araddr] [get_bd_pins xlslice_4/Dout]
-  connect_bd_net -net xlslice_5_Dout [get_bd_pins axi_uartlite_0/s_axi_awaddr] [get_bd_pins xlslice_5/Dout]
 
   # Create address segments
+  create_bd_addr_seg -range 0x00001000 -offset 0x00000000 [get_bd_addr_spaces S_AXI] [get_bd_addr_segs axi_uartlite_0/S_AXI/Reg] SEG_axi_uartlite_0_Reg
 
 
   # Restore current instance
