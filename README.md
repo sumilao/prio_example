@@ -13,7 +13,7 @@ In order to install it on your PYNQ, you're PYNQ must be running the v2.4 image.
 To install the PRIO project, run the following command from a terminal connected to your board:
 
 ```console
-sudo -H pip3 install git+https://github.com/byuccl/prio.git@project_flow
+sudo -H pip3 install git+https://github.com/gaskint/prio_example.git
 ```
 The pip install will create a partial_reconfig folder in  ~/pynq/overlays/ on the PYNQ board. This directory will contain the necessary files, including bitstreams and python files, that are needed for Partial-Reconfiguration on the PYNQ.
 
