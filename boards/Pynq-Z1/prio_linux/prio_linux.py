@@ -10,7 +10,7 @@ class PrIoOverlay(Overlay):
 		super().__init__(bitfile_name)
 
 	def pr_download(self, partial_region, partial_bit, dtbo_path=None):
-		# decoupler = GPIO(int(self.pr_region[3]) + GPIO.get_gpio_base(), 'out')
-		# decoupler.write(1)
+		decoupler = GPIO(int(partial_region[3]) + GPIO.get_gpio_base(), 'out')
+		decoupler.write(1)
 		super().pr_download(partial_region, partial_bit, dtbo_path)
-		# decoupler.write(0)
+		decoupler.write(0)
