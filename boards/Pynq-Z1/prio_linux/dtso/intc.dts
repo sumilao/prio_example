@@ -1,0 +1,25 @@
+/dts-v1/;
+/plugin/;
+
+/{
+	compatible = "xlnx,zynq-7000";
+
+	fragment@0 {		
+		target = <&amba>;
+
+		__overlay__ {
+
+			byu_intc: byu_intc@41810000 {			
+				compatible = "xlnx,xps-intc-1.00.a";			              			
+				interrupt-parent = <&intc>;
+				interrupts = <0x0 0x1e 0x04>;
+				reg = <0x41810000 0x10000>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+				xlnx,kind-of-intr = <0x0>;
+		   		xlnx,num-intr-inputs = <0x6>;
+			};
+		};
+	};
+};
+

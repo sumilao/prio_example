@@ -1,0 +1,45 @@
+
+/dts-v1/;
+/plugin/;
+
+/{
+	compatible = "xlnx,zynq-7000";
+
+	fragment@0 {		
+		target = <&amba>;
+
+		__overlay__ {
+			axi_quad_spi_1: spi@41230000 {
+		                compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
+		                interrupt-parent = <&xil_intc>;
+						interrupts = < 0x0 0x21 0x4 >;
+						reg = < 41230000 0x10000 >;
+		                fifo-size = <0x10>;
+		                xlnx,instance = "axi_quad_spi_inst";
+		                xlnx,num-ss-bits = <0x1>;
+		                xlnx,num-transfer-bits = <0x8>;
+		                xlnx,s-axi4-addr-width = <0x18>;
+		                xlnx,s-axi4-data-width = <0x20>;
+		                xlnx,s-axi4-id-width = <0x0>;
+		                xlnx,sck-ratio = <0x10>;
+		                xlnx,sck-ratio1 = <0x1>;
+		                xlnx,spi-mem-addr-bits = <0x18>;
+		                xlnx,spi-memory = <0x1>;
+		                xlnx,spi-mode = <0x0>;
+		                xlnx,sub-family = "zynq";
+		                xlnx,type-of-axi4-interface = <0x0>;
+		                xlnx,use-startup = <0x0>;
+		                xlnx,xip-mode = <0x0>;
+		                #address-cells = <1>;
+		                #size-cells = <0>;is-dual = <0>;
+				spidev0: spidev@0{
+				    compatible = "spidev";
+				    reg = <0>;      /* CE0 */
+				    #address-cells = <1>;
+				    #size-cells = <0>;
+				    spi-max-frequency = <100000000>;
+			    };
+		     };
+		};
+	};
+};

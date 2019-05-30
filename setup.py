@@ -72,6 +72,8 @@ setup(
     version='1.0',
     install_requires=[
           'pynq>=2.3'
+          'pyserial'
+          'smbus2'
     ],
     url='https://github.com/byuccl/PYNQ-PRIO',
     license='BSD 3-Clause License',
