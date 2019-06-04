@@ -1,3 +1,4 @@
+#!/bin/bash
 
 read -d '' PACKAGES <<EOT
 libssl-dev
