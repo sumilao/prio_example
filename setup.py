@@ -8,7 +8,8 @@ import shutil
 
 
 # global variables
-board = os.environ['BOARD']
+board = 'Pynq-Z1'
+#os.environ['BOARD']
 board_folder = 'boards/{}/'.format(board)
 notebooks_dir = os.environ['PYNQ_JUPYTER_NOTEBOOKS']
 prio_data_files = []
